@@ -71,7 +71,7 @@ The numerical experiments were carried out using Julia v1.9.3.
 
 - [Hendrik Ranocha](https://ranocha.de) (Johannes Gutenberg University Mainz, Germany)
 - [Andrew Winters](https://liu.se/en/employee/andwi94) (Linköping University, Sweden)
-- Michael Schlottke-Lakemper (University of Stuttgart, Germany)
+- [Michael Schlottke-Lakemper](https://lakemper.eu) (RWTH Aachen University/University of Stuttgart, Germany)
 - Philipp Öffner (TU Clausthal, Germany)
 - Jan Glaubitz (MIT, USA)
 - Gregor J. Gassner (University of Cologne, Germany)
