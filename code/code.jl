@@ -31,9 +31,13 @@ const figdir = joinpath(dirname(@__DIR__), "figures")
 # Spectra
 
 function plot_spectra()
-    # Upwind SBP FD
-    let accuracy_order = 4
-        fig = plot(xguide = "Real part", yguide = "Imaginary part")
+    # Common axis formatting
+    xlims = (-320, 0)
+    ylims = (-250, 250)
+
+    # Show spectra for comparable upwind SBP FD and DGSEM schemes in a single plot
+    let accuracy_order = 4, polydeg = 2
+        fig = plot(xguide = "Real part", yguide = "Imaginary part", xlims=xlims, ylims=ylims)
         let
             nnodes = 48
             initial_refinement_level = 2
@@ -41,7 +45,7 @@ function plot_spectra()
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with $(nnodes) nodes"
+            label = "$(2^initial_refinement_level) upwind SBP elements with $(nnodes) nodes"
             plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :solid)
         end
         let
@@ -51,7 +55,7 @@ function plot_spectra()
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with $(nnodes) nodes"
+            label = "$(2^initial_refinement_level) upwind SBP elements with $(nnodes) nodes"
             plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :dash)
         end
         let
@@ -61,16 +65,26 @@ function plot_spectra()
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with $(nnodes) nodes"
+            label = "$(2^initial_refinement_level) upwind SBP elements with $(nnodes) nodes"
             plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :dot)
+        end
+        let
+            initial_refinement_level = 6
+            λ = compute_spectrum_1d_dgsem(; initial_refinement_level, polydeg)
+            @show extrema(real, λ)
+            @show maximum(abs, λ)
+            λ = sort_spectrum(λ)
+            label = "$(2^initial_refinement_level) DG elements with polynomial degree $polydeg"
+            plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :dashdotdot,
+                  color = :black)
         end
         plot!(fig, legend = :outertop)
         savefig(fig, joinpath(figdir,
-                "spectra_linear_advection_1d_order$(accuracy_order).pdf"))
+                "spectra_linear_advection_1d_order$(accuracy_order)_polydeg$(polydeg).pdf"))
     end
 
-    let accuracy_order = 6
-        fig = plot(xguide = "Real part", yguide = "Imaginary part")
+    let accuracy_order = 6, polydeg = 3
+        fig = plot(xguide = "Real part", yguide = "Imaginary part", xlims=xlims, ylims=ylims)
         let
             nnodes = 64
             initial_refinement_level = 2
@@ -78,7 +92,7 @@ function plot_spectra()
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with $(nnodes) nodes"
+            label = "$(2^initial_refinement_level) upwind SBP elements with $(nnodes) nodes"
             plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :solid)
         end
         let
@@ -88,7 +102,7 @@ function plot_spectra()
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with $(nnodes) nodes"
+            label = "$(2^initial_refinement_level) upwind SBP elements with $(nnodes) nodes"
             plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :dash)
         end
         let
@@ -98,45 +112,22 @@ function plot_spectra()
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with $(nnodes) nodes"
+            label = "$(2^initial_refinement_level) upwind SBP elements with $(nnodes) nodes"
             plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :dot)
         end
-        plot!(fig, legend = :outertop)
-        savefig(fig, joinpath(figdir,
-                "spectra_linear_advection_1d_order$(accuracy_order).pdf"))
-    end
-
-    # Classical DGSEM
-    let polydeg = 2
-        fig = plot(xguide = "Real part", yguide = "Imaginary part")
         let
             initial_refinement_level = 6
             λ = compute_spectrum_1d_dgsem(; initial_refinement_level, polydeg)
             @show extrema(real, λ)
             @show maximum(abs, λ)
             λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with polynomial degree $polydeg"
-            plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()...)
+            label = "$(2^initial_refinement_level) DG elements with polynomial degree $polydeg"
+            plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()..., linestyle = :dashdotdot,
+                  color = :black)
         end
         plot!(fig, legend = :outertop)
         savefig(fig, joinpath(figdir,
-                "spectra_linear_advection_1d_dgsem_polydeg$(polydeg).pdf"))
-    end
-
-    let polydeg = 3
-        fig = plot(xguide = "Real part", yguide = "Imaginary part")
-        let
-            initial_refinement_level = 6
-            λ = compute_spectrum_1d_dgsem(; initial_refinement_level, polydeg)
-            @show extrema(real, λ)
-            @show maximum(abs, λ)
-            λ = sort_spectrum(λ)
-            label = "$(2^initial_refinement_level) elements with polynomial degree $polydeg"
-            plot!(fig, real.(λ), imag.(λ); label, plot_kwargs()...)
-        end
-        plot!(fig, legend = :outertop)
-        savefig(fig, joinpath(figdir,
-                "spectra_linear_advection_1d_dgsem_polydeg$(polydeg).pdf"))
+                "spectra_linear_advection_1d_order$(accuracy_order)_polydeg$(polydeg).pdf"))
     end
 
     @info "1D spectra saved in the directory `figdir`" figdir
@@ -150,7 +141,7 @@ function plot_kwargs()
         legendfontsize = 14)
     (; linewidth = 3, gridlinewidth = 2,
         markersize = 8, markerstrokewidth = 4,
-        fontsizes...)
+        fontsizes..., size=(600, 500))
 end
 
 function sort_spectrum(λ)
