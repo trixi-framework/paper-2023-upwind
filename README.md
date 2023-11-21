@@ -44,14 +44,12 @@ guarantee their stability and robustness, especially for under-resolved
 flows. A typical approach is to combine a well-working baseline scheme
 with additional techniques to ensure invariant domain preservation.
 To obtain good results without too much dissipation, it is important to
-develop good baseline methods. Entropy-dissipative schemes using
-summation-by-parts have been developed within the last decade and are
-very promising --- both from a theoretical point of view and in many
-applications. However, Gassner, Svärd, and Hindenlang (2022) reported
-some cases where these baseline schemes fail and related this to a loss
-of local linear/energy stability. In this contribution, we present
-high-order upwind summation-by-parts methods as an alternative and
-demonstrate their properties for under-resolved flows.
+develop suitable baseline methods.
+In this article, we study upwind summation-by-parts operators, which
+have been used mostly for linear problems so far. We discuss their
+relation to flux vector splitting methods and investigate their local
+linear/energy stability. Finally, we present some numerical examples
+for shock-free flows of the compressible Euler equations.
 
 
 ## Numerical experiments
