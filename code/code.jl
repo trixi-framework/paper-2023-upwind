@@ -820,6 +820,89 @@ function reset_threads!()
     return nothing
 end
 
+function run_kelvin_helmholtz(; accuracy_order = 4, nnodes = 16,
+                                initial_refinement_level = 2,
+                                flux_splitting = splitting_vanleer_haenel,
+                                source_of_coefficients = Mattsson2017,
+                                polydeg = nothing,
+                                volume_flux = flux_ranocha_turbo,
+                                tol = 1.0e-6)
+    equations = CompressibleEulerEquations2D(1.4)
+
+    function initial_condition(x, t, equations::CompressibleEulerEquations2D)
+        # change discontinuity to tanh
+        # typical resolution 128^2, 256^2
+        # domain size is [-1,+1]^2
+        slope = 15
+        B = tanh(slope * x[2] + 7.5) - tanh(slope * x[2] - 7.5)
+        rho = 0.5 + 0.75 * B
+        v1 = 0.5 * (B - 1)
+        v2 = 0.1 * sin(2 * pi * x[1])
+        p = 1.0
+        return prim2cons(SVector(rho, v1, v2, p), equations)
+    end
+
+    if polydeg === nothing
+        # Use upwind SBP discretization
+        D_upw = upwind_operators(source_of_coefficients;
+                                 derivative_order = 1,
+                                 accuracy_order,
+                                 xmin = -1.0, xmax = 1.0,
+                                 N = nnodes)
+        solver = FDSBP(D_upw,
+                       surface_integral=SurfaceIntegralUpwind(flux_splitting),
+                    #    surface_integral=SurfaceIntegralStrongForm(flux_lax_friedrichs),
+                       volume_integral=VolumeIntegralUpwind(flux_splitting))
+    else
+        # Use DGSEM
+        volume_integral = VolumeIntegralFluxDifferencing(volume_flux)
+        solver = DGSEM(; polydeg, surface_flux = flux_lax_friedrichs, volume_integral)
+    end
+
+    coordinates_min = (-1.0, -1.0)
+    coordinates_max = ( 1.0,  1.0)
+    mesh = TreeMesh(coordinates_min, coordinates_max;
+                    initial_refinement_level,
+                    n_cells_max = 100_000)
+
+    semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition, solver)
+
+    tspan = (0.0, 15.0)
+    ode = semidiscretize(semi, tspan)
+
+    summary_callback = SummaryCallback()
+
+    analysis_interval = 1000
+    analysis_callback = AnalysisCallback(semi, interval=analysis_interval)
+
+    alive_callback = AliveCallback(analysis_interval=analysis_interval)
+
+    saving_callback = SaveSolutionCallback(; interval = 100,
+                                             save_final_solution = true,
+                                             output_directory = joinpath(@__DIR__, "out_dev"),
+                                            #  solution_variables = cons2cons)
+                                             solution_variables = cons2prim)
+
+    callbacks = CallbackSet(summary_callback,
+                            analysis_callback,
+                            alive_callback,
+                            saving_callback)
+
+    integrator = init(ode, SSPRK43(); controller = PIDController(0.55, -0.27, 0.05),
+                      abstol = tol, reltol = tol,
+                      ode_default_options()..., callback=callbacks)
+    try
+        solve!(integrator)
+    catch err
+        @warn "Crashed at time" integrator.t
+        saving_callback.affect!(integrator)
+        reset_threads!()
+    end
+    summary_callback() # print the timer summary
+
+    return nothing
+end
+
 
 ################################################################################
 # Inviscid Taylor-Green vortex
