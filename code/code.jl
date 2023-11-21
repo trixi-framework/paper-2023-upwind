@@ -207,6 +207,64 @@ end
 
 
 ################################################################################
+# Local linear/energy experiments
+
+function local_linear_stability(; latex = false)
+    @info "Full upwind discretization (only D_−)"
+
+    accuracy_orders = Int[]
+    num_elements = Int[]
+    num_nodes = Int[]
+    max_real_part = Float64[]
+
+    for accuracy_order in 2:7
+        for nelements in 1:2
+            for nnodes in 13:14
+                λ = compute_spectrum_burgers_upwind_full(; accuracy_order,
+                                                           nnodes,
+                                                           nelements)
+                push!(accuracy_orders, accuracy_order)
+                push!(num_elements, nelements)
+                push!(num_nodes, nnodes)
+                push!(max_real_part, maximum(real, λ))
+            end
+        end
+    end
+
+    # print results
+    data = hcat(accuracy_orders, num_elements, num_nodes, max_real_part)
+    header = ["order", "#elements", "#nodes", "max. real part"]
+    kwargs = (; header, formatters=(ft_printf("%2d", [1, 2, 3]),
+                                    ft_printf("%9.2e", [4])))
+    pretty_table(data; kwargs...)
+    if latex
+        pretty_table(data; kwargs..., backend=Val(:latex))
+    end
+
+    return nothing
+end
+
+function compute_spectrum_burgers_upwind_full(; accuracy_order,
+                                                nnodes,
+                                                nelements)
+
+    D_local = derivative_operator(Mattsson2017(:minus);
+                                  derivative_order = 1,
+                                  xmin = -1.0, xmax = 1.0,
+                                  accuracy_order, N = nnodes)
+    mesh = UniformPeriodicMesh1D(xmin = -1.0, xmax = 1.0, Nx = nelements)
+
+    D = couple_discontinuously(D_local, mesh, Val(:minus))
+
+    u0 = rand(size(D, 2))
+    J = Trixi.ForwardDiff.jacobian(u0) do u
+        -D * (u.^2 ./ 2)
+    end
+    return eigvals(J)
+end
+
+
+################################################################################
 # Convergence experiments
 
 function convergence_tests_1d_advection(; latex = false)

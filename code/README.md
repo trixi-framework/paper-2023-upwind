@@ -15,6 +15,8 @@ julia> convergence_tests_1d_euler()
 
 julia> plot_spectra()
 
+julia> local_linear_stability()
+
 julia> experiments_isentropic_vortex()
 
 julia> experiments_kelvin_helmholtz_instability()
