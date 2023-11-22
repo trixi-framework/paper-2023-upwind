@@ -46,8 +46,12 @@ with additional techniques to ensure invariant domain preservation.
 To obtain good results without too much dissipation, it is important to
 develop suitable baseline methods.
 In this article, we study upwind summation-by-parts operators, which
-have been used mostly for linear problems so far. We discuss their
-relation to flux vector splitting methods and investigate their local
+have been used mostly for linear problems so far. These operators come
+with some built-in dissipation everywhere, not only at element interfaces
+as typical in discontinuous Galerkin methods. At the same time, this
+dissipation does not introduce additional parameters.
+We discuss the relation of high-order upwind summation-by-parts methods
+to flux vector splitting schemes and investigate their local
 linear/energy stability. Finally, we present some numerical examples
 for shock-free flows of the compressible Euler equations.
 
