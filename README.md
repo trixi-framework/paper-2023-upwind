@@ -1,7 +1,7 @@
 # High-order upwind summation-by-parts methods for nonlinear conservation laws
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/TODO.svg)](https://doi.org/TODO)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10200102.svg)](https://doi.org/10.5281/zenodo.10200102)
 
 This repository contains information and code to reproduce the results presented in the
 article
@@ -30,8 +30,8 @@ use the implementations provided here, please **also** cite this repository as
           Michael and {\"O}ffner, Philipp and Glaubitz, Jan and Gassner,
           Gregor Josef},
   year={2023},
-  howpublished={TODO},
-  doi={TODO}
+  howpublished={\url{https://github.com/trixi-framework/paper-2023-upwind}},
+  doi={10.5281/zenodo.10200102}
 }
 ```
 
