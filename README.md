@@ -12,10 +12,12 @@ article
   author={Ranocha, Hendrik and Winters, Andrew Ross and
           Schlottke-Lakemper, Michael and {\"O}ffner, Philipp and
           Glaubitz, Jan and Gassner, Gregor Josef},
+  year={2023},
+  month={11},
+  doi={10.48550/arXiv.2311.13888},
   eprint={2311.13888},
   eprinttype={arxiv},
-  eprintclass={math.NA},
-  doi={10.48550/arXiv.2311.13888}
+  eprintclass={math.NA}
 }
 ```
 
