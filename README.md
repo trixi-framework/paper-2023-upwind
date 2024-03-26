@@ -63,7 +63,7 @@ To reproduce the numerical experiments using Trixi.jl, you need to install
 
 The subfolder `code` of this repository contains a `README.md` file with
 instructions to reproduce the Cartesian mesh numerical experiments and
-the subfolder `code_curved` contains a `README.md` file has instructions
+the subfolder `code_curved` contains a `README.md` file with instructions
 to reproduce the curvilinear mesh numerical experiments.
 Both subfolders also include information about postprocessing.
 
