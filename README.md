@@ -7,8 +7,8 @@ This repository contains information and code to reproduce the results presented
 article
 ```bibtex
 @online{ranocha2023high,
-  title={High-order upwind summation-by-parts methods for nonlinear
-         conservation laws},
+  title={On the robustness of high-order upwind summation-by-parts methods
+         for nonlinear conservation laws},
   author={Ranocha, Hendrik and Winters, Andrew Ross and
           Schlottke-Lakemper, Michael and {\"O}ffner, Philipp and
           Glaubitz, Jan and Gassner, Gregor Josef},
@@ -26,8 +26,8 @@ use the implementations provided here, please **also** cite this repository as
 ```bibtex
 @misc{ranocha2023highRepro,
   title={Reproducibility repository for
-         "{H}igh-order upwind summation-by-parts methods for nonlinear
-         conservation laws"},
+         "{O}n the robustness of high-order upwind summation-by-parts methods
+         for nonlinear conservation laws"},
   author={Ranocha, Hendrik and Winters, Andrew Ross and Schlottke-Lakemper,
           Michael and {\"O}ffner, Philipp and Glaubitz, Jan and Gassner,
           Gregor Josef},
@@ -40,22 +40,18 @@ use the implementations provided here, please **also** cite this repository as
 
 ## Abstract
 
-High-order methods for conservation laws can be very efficient,
-in particular on modern hardware. However, it can be challenging to
-guarantee their stability and robustness, especially for under-resolved
-flows. A typical approach is to combine a well-working baseline scheme
-with additional techniques to ensure invariant domain preservation.
-To obtain good results without too much dissipation, it is important to
-develop suitable baseline methods.
-In this article, we study upwind summation-by-parts operators, which
-have been used mostly for linear problems so far. These operators come
-with some built-in dissipation everywhere, not only at element interfaces
-as typical in discontinuous Galerkin methods. At the same time, this
-dissipation does not introduce additional parameters.
-We discuss the relation of high-order upwind summation-by-parts methods
-to flux vector splitting schemes and investigate their local
-linear/energy stability. Finally, we present some numerical examples
-for shock-free flows of the compressible Euler equations.
+We use the framework of upwind summation-by-parts (SBP) operators developed
+by Mattsson (2017, [DOI: 10.1016/j.jcp.2017.01.042](https://doi.org/10.1016/j.jcp.2017.01.042))
+study different flux vector splittings in this context. To do so, we
+introduce discontinuous-Galerkin-like interface terms for multi-block upwind
+SBP methods applied to nonlinear conservation laws.
+We investigate the behavior of the upwind SBP methods for flux vectors splittings
+of varying complexity on Cartesian as well as unstructured curvilinear multi-block meshes.
+Moreover, we analyze the local linear/energy stability of these methods following
+Gassner, Svärd, and Hindenlang (2022, [DOI: 10.1007/s10915-021-01720-8](https://doi.org/10.1007/s10915-021-01720-8)).
+Finally, we investigate the robustness of upwind SBP methods for challenging
+examples of shock-free flows of the compressible Euler equations such as
+a Kelvin-Helmholtz instability and the inviscid Taylor-Green vortex.
 
 
 ## Numerical experiments
@@ -66,9 +62,13 @@ To reproduce the numerical experiments using Trixi.jl, you need to install
 [Julia](https://julialang.org/).
 
 The subfolder `code` of this repository contains a `README.md` file with
-instructions to reproduce the numerical experiments, including postprocessing.
+instructions to reproduce the Cartesian mesh numerical experiments and
+the subfolder `code_curved` contains a `README.md` file has instructions
+to reproduce the curvilinear mesh numerical experiments.
+Both subfolders also include information about postprocessing.
 
-The numerical experiments were carried out using Julia v1.9.3.
+The Cartesian mesh numerical experiments were carried out using Julia v1.9.3
+and the curvilinear mesh results were carried out using Julia 1.10.0.
 
 
 ## Authors
