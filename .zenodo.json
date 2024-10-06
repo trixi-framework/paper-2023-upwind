@@ -1,6 +1,7 @@
 {
     "license": "MIT",
-    "title": "Reproducibility repository for High-order upwind summation-by-parts methods for nonlinear conservation laws",
+    "title": "Reproducibility repository for On the robustness of high-order upwind summation-by-parts methods
+         for nonlinear conservation laws",
     "upload_type": "software",
     "creators": [
         {
