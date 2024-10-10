@@ -6,15 +6,18 @@
 This repository contains information and code to reproduce the results presented in the
 article
 ```bibtex
-@online{ranocha2023high,
-  title={On the robustness of high-order upwind summation-by-parts methods
-         for nonlinear conservation laws},
+@article{ranocha2025robustness,
+  title={On the robustness of high-order upwind summation-by-parts
+         methods for nonlinear conservation laws},
   author={Ranocha, Hendrik and Winters, Andrew Ross and
           Schlottke-Lakemper, Michael and {\"O}ffner, Philipp and
           Glaubitz, Jan and Gassner, Gregor Josef},
-  year={2023},
-  month={11},
-  doi={10.48550/arXiv.2311.13888},
+  journal={Journal of Computational Physics},
+  volume={520},
+  pages={113471},
+  year={2025},
+  month={01},
+  doi={10.1016/j.jcp.2024.113471},
   eprint={2311.13888},
   eprinttype={arxiv},
   eprintclass={math.NA}
@@ -24,7 +27,7 @@ article
 If you find these results useful, please cite the article mentioned above. If you
 use the implementations provided here, please **also** cite this repository as
 ```bibtex
-@misc{ranocha2023highRepro,
+@misc{ranocha2025robustnessRepro,
   title={Reproducibility repository for
          "{O}n the robustness of high-order upwind summation-by-parts methods
          for nonlinear conservation laws"},
